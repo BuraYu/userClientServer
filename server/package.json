@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "ava",
-    "start": "node_modules/.bin/nodemon --exec babel-node server.js"
+    "start": "node_modules/.bin/nodemon --exec babel-node src/server.js"
   },
   "keywords": [
     "Express",
@@ -14,8 +14,9 @@
   "author": "Burak - BuraYu",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.3",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "http-status-code": "^2.1.0",
+    "http-status-codes": "^2.3.0"
   },
   "devDependencies": {
     "@babel/node": "^7.26.0",
