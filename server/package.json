@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "ava",
+    "start": "node_modules/.bin/nodemon --exec babel-node server.js"
+  },
+  "keywords": [
+    "Express",
+    "JS"
+  ],
+  "author": "Burak - BuraYu",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "ava": "^6.2.0",
+    "nodemon": "^3.1.7"
+  }
+}
