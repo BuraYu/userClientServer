@@ -1,33 +1,36 @@
-import * as Yup from "yup";
+import * as yup from "yup";
 
-export const addUser = {
-  schema: {
-    body: {
-      yupSchema: Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        city: Yup.string(),
-        country: Yup.string(),
-      }),
-    },
-  },
+const MIN_LENGTH = {
+  name: 2,
+  city: 1,
+  country: 2,
+};
+
+const MAX_LENGTH = {
+  name: 20,
+  city: 30,
+  country: 30,
+  email: 100,
 };
 
 export const getUser = {
   schema: {
     params: {
-      yupSchema: Yup.object().shape({
-        id: Yup.number().required(),
+      yupSchema: yup.object().shape({
+        id: yup.number().required(),
       }),
     },
   },
 };
 
-export const deleteUser = {
+export const addUser = {
   schema: {
-    params: {
-      yupSchema: Yup.object().shape({
-        id: Yup.number().required(),
+    body: {
+      yupSchema: yup.object().shape({
+        name: yup.string().min(MIN_LENGTH.name).max(MAX_LENGTH.name),
+        email: yup.string().email().max(MAX_LENGTH.email),
+        city: yup.string().min(MIN_LENGTH.city).max(MAX_LENGTH.city),
+        country: yup.string().min(MIN_LENGTH.country).max(MAX_LENGTH.country),
       }),
     },
   },
@@ -35,25 +38,27 @@ export const deleteUser = {
 
 export const updateUser = {
   schema: {
+    params: {
+      yupSchema: yup.object().shape({
+        id: yup.number().required(),
+      }),
+    },
     body: {
-      yupSchema: Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        city: Yup.string(),
-        country: Yup.string(),
+      yupSchema: yup.object().shape({
+        name: yup.string().min(MIN_LENGTH.name).max(MAX_LENGTH.name),
+        email: yup.string().email(),
+        city: yup.string().min(MIN_LENGTH.city).max(MAX_LENGTH.city),
+        country: yup.string().min(MIN_LENGTH.country).max(MAX_LENGTH.country),
       }),
     },
   },
 };
 
-export const getAllUser = {
+export const removeUser = {
   schema: {
-    body: {
-      yupSchema: Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        city: Yup.string(),
-        country: Yup.string(),
+    params: {
+      yupSchema: yup.object().shape({
+        id: yup.number().required(),
       }),
     },
   },
