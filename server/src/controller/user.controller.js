@@ -1,3 +1,11 @@
+import userService from "../services/user.service";
+import { StatusCodes } from "http-status-codes";
+
+const STATUS = {
+  success: "OK",
+  failure: "NO",
+};
+
 const updateUser = (req, res) => {
   const { body: user } = req;
 

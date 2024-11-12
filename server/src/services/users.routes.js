@@ -1,24 +1,32 @@
 import express from "express";
-import { StatusCodes } from "http-status-codes";
 import { expressYupMiddleware } from "express-yup-middleware";
+import { StatusCodes } from "http-status-codes";
 
-import userService from "./user.service";
-import { addUser, updateUser } from "./users.schemas";
+import {
+  addUser,
+  updateUser,
+  getAllUser,
+  getUser,
+  deleteUser,
+} from "./users.schemas";
 import userController from "../controller/user.controller";
 
 const router = express.Router();
 
-const STATUS = {
-  success: "OK",
-  failure: "NO",
-};
-
 //Get all users
-router.get("/all", userController.getAllUsers);
+router.get(
+  "/all",
+  expressYupMiddleware({ schemaValidator: getAllUser }),
+  userController.getAllUsers
+);
 
 //Get user by id
 
-router.get("/get/:id", userController.getUser);
+router.get(
+  "/get/:id",
+  expressYupMiddleware({ schemaValidator: getUser }),
+  userController.getUser
+);
 
 //add a user
 
@@ -37,6 +45,10 @@ router.put(
   userController.updateUser
 );
 
-router.delete("/:id", userController.deleteUser);
+router.delete(
+  "/:id",
+  expressYupMiddleware({ schemaValidator: deleteUser }),
+  userController.deleteUser
+);
 
 export default router;
