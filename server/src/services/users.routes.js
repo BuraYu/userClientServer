@@ -1,7 +1,9 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
+import { expressYupMiddleware } from "express-yup-middleware";
 
-import userService from "./services/user.service";
+import userService from "./user.service";
+import { addUser, updateUser } from "./users.schemas";
 
 const router = express.Router();
 
@@ -43,38 +45,50 @@ router.get("/get/:id", (req, res) => {
 
 //add a user
 
-router.put("/add", (req, res) => {
-  const { body: user } = req;
-  console.log(user);
-  const addedUser = userService.addUser(user);
-  console.log(addedUser);
-  return res.status(StatusCodes.BAD_REQUEST).send({
-    status: STATUS.success,
-    user: addedUser,
-  });
-});
+router.post(
+  "/",
+  expressYupMiddleware({
+    schemaValidator: addUser,
+    expectedStatusCode: StatusCodes.BAD_REQUEST,
+  }),
+  (req, res) => {
+    const { body: user } = req;
+    const addedUser = userService.addUser(user);
+    return res.status(StatusCodes.CREATED).send({
+      status: STATUS.success,
+      user: addedUser,
+    });
+  }
+);
 
 //Update a user
 
-router.put("/update/:id", (req, res) => {
-  const { body: user } = req;
+router.put(
+  "/:id",
+  expressYupMiddleware({
+    schemaValidator: updateUser,
+    expectedStatusCode: StatusCodes.BAD_REQUEST,
+  }),
+  (req, res) => {
+    const { body: user } = req;
 
-  const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.id, 10);
 
-  const updatedUser = userService.updateUser(id, user);
+    const updatedUser = userService.updateUser(id, user);
 
-  if (updatedUser) {
-    return res.status(StatusCodes.OK).send({
-      status: STATUS.success,
-      user: updatedUser,
-    });
-  } else {
-    return res.status(StatusCodes.NOT_FOUND).send({
-      status: STATUS.failure,
-      message: `User ${id} is not found.`,
-    });
+    if (updatedUser) {
+      return res.status(StatusCodes.OK).send({
+        status: STATUS.success,
+        user: updatedUser,
+      });
+    } else {
+      return res.status(StatusCodes.NOT_FOUND).send({
+        status: STATUS.failure,
+        message: `User ${id} is not found.`,
+      });
+    }
   }
-});
+);
 
 //remove a user
 
