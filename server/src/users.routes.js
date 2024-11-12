@@ -2,7 +2,6 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 
 import userService from "./services/user.service";
-import users from "./models/data/users.data";
 
 const router = express.Router();
 
@@ -11,16 +10,11 @@ const STATUS = {
   failure: "NO",
 };
 
-router.get("/ping", (req, res) => {
-  res.status(StatusCodes.OK);
-  res.send("OK");
-});
-
 //Get all users
 router.get("/all", (req, res) => {
   const users = userService.getAllUsers();
 
-  if (user) {
+  if (users) {
     return res.status(StatusCodes.OK).send(users);
   }
   return res.status(StatusCodes.NOT_FOUND).send({
@@ -38,25 +32,25 @@ router.get("/get/:id", (req, res) => {
   if (user) {
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
-      message: user,
+      user,
     });
   }
   return res.status(StatusCodes.NOT_FOUND).send({
     status: STATUS.failure,
-    message: "No users found",
+    message: "User ${id} is not found.",
   });
 });
 
 //add a user
 
-router.post("/add", (req, res) => {
+router.put("/add", (req, res) => {
   const { body: user } = req;
-
+  console.log(user);
   const addedUser = userService.addUser(user);
-
+  console.log(addedUser);
   return res.status(StatusCodes.BAD_REQUEST).send({
     status: STATUS.success,
-    message: addedUser,
+    user: addedUser,
   });
 });
 
@@ -72,7 +66,29 @@ router.put("/update/:id", (req, res) => {
   if (updatedUser) {
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
-      message: updatedUser,
+      user: updatedUser,
+    });
+  } else {
+    return res.status(StatusCodes.NOT_FOUND).send({
+      status: STATUS.failure,
+      message: `User ${id} is not found.`,
+    });
+  }
+});
+
+//remove a user
+
+router.delete("/:id", (req, res) => {
+  const { body: user } = req;
+  console.log(user);
+  const id = parseInt(req.params.id, 10);
+
+  const status = userService.removeUser(id, user);
+
+  if (status) {
+    return res.status(StatusCodes.OK).send({
+      status: STATUS.success,
+      message: `User with ID ${id} has been successfully deleted.`,
     });
   } else {
     return res.status(StatusCodes.NOT_FOUND).send({
