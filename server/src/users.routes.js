@@ -2,6 +2,7 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 
 import userService from "./services/user.service";
+import users from "./models/data/users.data";
 
 const router = express.Router();
 
@@ -15,14 +16,38 @@ router.get("/ping", (req, res) => {
   res.send("OK");
 });
 
-router.get("/getall", (req, res) => {
-  const getAllUsers = userService.getAllUsers();
+//Get all users
+router.get("/all", (req, res) => {
+  const users = userService.getAllUsers();
 
-  return res.status(StatusCodes.OK).send({
-    status: STATUS.success,
-    message: getAllUsers,
+  if (user) {
+    return res.status(StatusCodes.OK).send(users);
+  }
+  return res.status(StatusCodes.NOT_FOUND).send({
+    status: STATUS.failure,
+    message: "No users found",
   });
 });
+
+//Get user by id
+
+router.get("/get/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = userService.getUser(id);
+  console.log("this", req.params.id);
+  if (user) {
+    return res.status(StatusCodes.OK).send({
+      status: STATUS.success,
+      message: user,
+    });
+  }
+  return res.status(StatusCodes.NOT_FOUND).send({
+    status: STATUS.failure,
+    message: "No users found",
+  });
+});
+
+//add a user
 
 router.post("/add", (req, res) => {
   const { body: user } = req;
@@ -34,6 +59,8 @@ router.post("/add", (req, res) => {
     message: addedUser,
   });
 });
+
+//Update a user
 
 router.put("/update/:id", (req, res) => {
   const { body: user } = req;

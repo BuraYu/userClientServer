@@ -1,13 +1,14 @@
 import users from "../data/users.data";
 
 const get = (userId) => {
+  console.log(userId);
   const findUser = users.find((user) => {
     if (user.id === userId) {
       return user;
     }
     return null;
   });
-
+  console.log(findUser);
   return findUser;
 };
 
@@ -53,7 +54,7 @@ const update = (userId, newDetails) => {
     ...newDetails,
   };
   users[userIndex] = updatedUser;
-  
+
   return updatedUser;
 };
 
