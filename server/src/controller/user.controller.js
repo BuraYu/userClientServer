@@ -1,5 +1,6 @@
 import userService from "../services/user.service";
 import { StatusCodes } from "http-status-codes";
+import logger, { pino } from "pino";
 
 const STATUS = {
   success: "OK",
@@ -26,12 +27,17 @@ const updateUser = (req, res) => {
 
   const updatedUser = userService.updateUser(id, user);
 
+  logger.info(`Attempting to update user with ID: ${id}`);
+
   if (updatedUser) {
+    logger.info(`User with ID ${id} succesfully updated`);
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       user: updatedUser,
     });
   } else {
+    logger.info(`User with ID ${id} not found`);
+
     return res.status(StatusCodes.NOT_FOUND).send({
       status: STATUS.failure,
       message: `User ${id} is not found.`,
@@ -55,6 +61,7 @@ const updateUser = (req, res) => {
 const addUser = (req, res) => {
   const { body: user } = req;
   const addedUser = userService.addUser(user);
+  logger.info(`Attempting to add user ${JSON.stringify(user)}`);
   return res.status(StatusCodes.CREATED).send({
     status: STATUS.success,
     user: addedUser,
@@ -81,13 +88,18 @@ const deleteUser = (req, res) => {
   const id = parseInt(req.params.id, 10);
 
   const status = userService.removeUser(id, user);
+  logger.info(`Attempting to delete user with ID: ${id}`);
 
   if (status) {
+    logger.info(`User with ID ${id} succesfully deleted`);
+
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       message: `User with ID ${id} has been successfully deleted.`,
     });
   } else {
+    logger.info(`User with ID ${id} not found`);
+
     return res.status(StatusCodes.NOT_FOUND).send({
       status: STATUS.failure,
       message: `User ${id} is not found.`,
@@ -112,13 +124,18 @@ const deleteUser = (req, res) => {
 const getUser = (req, res) => {
   const id = parseInt(req.params.id);
   const user = userService.getUser(id);
-  console.log("this", req.params.id);
+
+  logger.info(`Attempting to get user with id: ${id}`);
+
   if (user) {
+    logger.info(`User with ${id} found`);
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       user,
     });
   }
+  logger.info(`User with ${id} not found`);
+
   return res.status(StatusCodes.NOT_FOUND).send({
     status: STATUS.failure,
     message: "User ${id} is not found.",
@@ -137,10 +154,12 @@ const getUser = (req, res) => {
 
 const getAllUsers = (req, res) => {
   const users = userService.getAllUsers();
-
+  logger.info("Attempting to get all users");
   if (users) {
+    logger.info("Returning all users");
     return res.status(StatusCodes.OK).send(users);
   }
+  logger.info("No users found");
   return res.status(StatusCodes.NOT_FOUND).send({
     status: STATUS.failure,
     message: "No users found",
