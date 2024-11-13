@@ -62,7 +62,7 @@ const addUser = (req, res) => {
 };
 
 /**
- * Updates a user by their ID.
+ * Deletes a user by their ID.
  * @function deleteUser
  * @param {Object} req - The request object.
  * @param {Object} req.body - The body of the request containing the user data to update.
@@ -96,7 +96,7 @@ const deleteUser = (req, res) => {
 };
 
 /**
- * Updates a user by their ID.
+ * Gets a user by their ID.
  * @function getUser
  * @param {Object} req - The request object.
  * @param {Object} req.body - The body of the request containing the user data to update.
@@ -126,7 +126,7 @@ const getUser = (req, res) => {
 };
 
 /**
- * Updates a user by their ID.
+ * Gets all the users.
  * @function getAllUsers
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
