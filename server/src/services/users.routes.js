@@ -14,11 +14,7 @@ import userController from "../controller/user.controller";
 const router = express.Router();
 
 //Get all users
-router.get(
-  "/all",
-  expressYupMiddleware({ schemaValidator: getAllUser }),
-  userController.getAllUsers
-);
+router.get("/all", userController.getAllUsers);
 
 //Get user by id
 
@@ -41,7 +37,10 @@ router.post(
 
 router.put(
   "/:id",
-  expressYupMiddleware({ schemaValidator: updateUser }),
+  expressYupMiddleware({
+    schemaValidator: updateUser,
+    expectedStatusCode: StatusCodes.BAD_REQUEST,
+  }),
   userController.updateUser
 );
 
