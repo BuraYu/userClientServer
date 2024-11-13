@@ -5,7 +5,6 @@ import { StatusCodes } from "http-status-codes";
 import {
   addUser,
   updateUser,
-  getAllUser,
   getUser,
   deleteUser,
 } from "./users.schemas";
